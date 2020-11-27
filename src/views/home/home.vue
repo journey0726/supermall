@@ -1,106 +1,106 @@
 <template>
-<div id="home">
-  <NavBar id='home-nav'> <div slot="center">购物街</div></NavBar> 
-  <scroll class="content">
-    <home-swiper :banners='banners'></home-swiper>
-    <recommend-view :recommends="recommends"></recommend-view>
-    <feature-view></feature-view>
-    <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick='tabClick'></tab-control>
-    <goods-list :goods='goods[currentType].list'></goods-list>
-  </scroll>
-    
-   
-</div>
+  <div id="home">
+    <NavBar id="home-nav"> <div slot="center">购物街</div></NavBar>
+    <scroll class="content" ref="scroll">
+      <home-swiper :banners="banners"></home-swiper>
+      <recommend-view :recommends="recommends"></recommend-view>
+      <feature-view></feature-view>
+      <tab-control
+        class="tab-control"
+        :titles="['流行', '新款', '精选']"
+        @tabClick="tabClick"
+      ></tab-control>
+      <goods-list :goods="goods[currentType].list"></goods-list>
+    </scroll>
+    <back-top @click.native="backTop"></back-top>
+  </div>
 </template>
 
 <script>
-import NavBar from '@/components/commom/navbar/NavBar.vue'
-import TabControl from '@/components/content/tabControl/TabControl.vue'
-import GoodsList from '@/components/content/goods/goodsList.vue'
-import Scroll from '@/components/commom/scroll/Scroll.vue'
+import NavBar from "@/components/commom/navbar/NavBar.vue";
+import TabControl from "@/components/content/tabControl/TabControl.vue";
+import GoodsList from "@/components/content/goods/goodsList.vue";
+import Scroll from "@/components/commom/scroll/Scroll.vue";
 
-import HomeSwiper from "@/views/home/childComps/HomeSwiper.vue"
-import RecommendView from '@/views/home/childComps/commendView.vue'
-import FeatureView from '@/views/home/childComps/FeatureView.vue'
+import HomeSwiper from "@/views/home/childComps/HomeSwiper.vue";
+import RecommendView from "@/views/home/childComps/commendView.vue";
+import FeatureView from "@/views/home/childComps/FeatureView.vue";
+import BackTop from "@/components/content/backTop/backTop.vue";
 
-import{getHomeMultiData,getGoodsData} from '@/network/home.js'
-
-
-
-
+import { getHomeMultiData, getGoodsData } from "@/network/home.js";
 
 export default {
-  name:'home',
-  components:{
+  name: "home",
+  components: {
     NavBar,
-   HomeSwiper,
-   RecommendView,
-   FeatureView,
+    HomeSwiper,
+    RecommendView,
+    FeatureView,
     FeatureView,
     TabControl,
     GoodsList,
-    Scroll
-
-    
-    
+    Scroll,
+    BackTop,
   },
-  data(){
+  data() {
     return {
-      banners:[],
-      recommends:[],
-      goods:{
-        'pop':{page:0,list:[]},
-        'new':{page:0,list:[]},
-        'sell':{page:0,list:[]},
+      banners: [],
+      recommends: [],
+      goods: {
+        pop: { page: 0, list: [] },
+        new: { page: 0, list: [] },
+        sell: { page: 0, list: [] },
       },
-      currentType:'pop'
-    }
+      currentType: "pop",
+    };
   },
-  created(){
-    this.getHomeMultiData()
-    this.getGoodsData('pop')
-    this.getGoodsData('new')
-    this.getGoodsData('sell')
+  created() {
+    this.getHomeMultiData();
+    this.getGoodsData("pop");
+    this.getGoodsData("new");
+    this.getGoodsData("sell");
   },
-  computed:{
-    showGoods(){
-      return this.goods[this.currentType].list
-    }
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType].list;
+    },
   },
-  methods:{
-    tabClick(index){
-      switch(index){
+  methods: {
+    tabClick(index) {
+      switch (index) {
         case 0:
-          this.currentType = 'pop';
-          break
+          this.currentType = "pop";
+          break;
         case 1:
-          this.currentType = 'new';
-          break
+          this.currentType = "new";
+          break;
         case 2:
-          this.currentType = 'sell';
-          break
+          this.currentType = "sell";
+          break;
       }
     },
-    getHomeMultiData(){
-      getHomeMultiData().then(res=>{
-      this.banners = res.data.banner.list
-      this.recommends = res.data.recommend.list
-    })
+    backTop(){
+      this.$refs.scroll.scrollTo(0,0)
     },
-    getGoodsData(type){
-      const page = this.goods[type].page+1
-      getGoodsData(type,page).then(res=>{
-      this.goods[type].list.push(...res.data.list)
-      this.goods[type].page+=1
-      
-    })
-    }
-  }
-}
+    getHomeMultiData() {
+      getHomeMultiData().then((res) => {
+        this.banners = res.data.banner.list;
+        this.recommends = res.data.recommend.list;
+      });
+    },
+    getGoodsData(type) {
+      const page = this.goods[type].page + 1;
+      getGoodsData(type, page).then((res) => {
+        this.goods[type].list.push(...res.data.list);
+        this.goods[type].page += 1;
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
-#home-nav{
+#home-nav {
   background-color: var(--color-tint);
   color: #fff;
   position: fixed;
@@ -125,7 +125,7 @@ export default {
   overflow: hidden;
   margin-top: 44px;
 } */
-.content{
+.content {
   overflow: hidden;
   position: absolute;
   top: 44px;
@@ -133,5 +133,4 @@ export default {
   left: 0;
   right: 0;
 }
-
 </style>
