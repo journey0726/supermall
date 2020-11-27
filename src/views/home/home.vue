@@ -1,47 +1,15 @@
 <template>
 <div id="home">
   <NavBar id='home-nav'> <div slot="center">购物街</div></NavBar> 
+  <scroll class="content">
     <home-swiper :banners='banners'></home-swiper>
     <recommend-view :recommends="recommends"></recommend-view>
     <feature-view></feature-view>
-    <tab-control class="tab-control" :titles="['流行','新款','精选']"></tab-control>
-    <goods-list :goods='goods["pop"].list'></goods-list>
-    <ul>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-           <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-           <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-           <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      <li>f</li>
-      
-      
-    </ul>
+    <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick='tabClick'></tab-control>
+    <goods-list :goods='goods[currentType].list'></goods-list>
+  </scroll>
+    
+   
 </div>
 </template>
 
@@ -49,12 +17,14 @@
 import NavBar from '@/components/commom/navbar/NavBar.vue'
 import TabControl from '@/components/content/tabControl/TabControl.vue'
 import GoodsList from '@/components/content/goods/goodsList.vue'
+import Scroll from '@/components/commom/scroll/Scroll.vue'
 
 import HomeSwiper from "@/views/home/childComps/HomeSwiper.vue"
 import RecommendView from '@/views/home/childComps/commendView.vue'
 import FeatureView from '@/views/home/childComps/FeatureView.vue'
 
 import{getHomeMultiData,getGoodsData} from '@/network/home.js'
+
 
 
 
@@ -68,7 +38,9 @@ export default {
    FeatureView,
     FeatureView,
     TabControl,
-    GoodsList
+    GoodsList,
+    Scroll
+
     
     
   },
@@ -80,7 +52,8 @@ export default {
         'pop':{page:0,list:[]},
         'new':{page:0,list:[]},
         'sell':{page:0,list:[]},
-      }
+      },
+      currentType:'pop'
     }
   },
   created(){
@@ -89,7 +62,25 @@ export default {
     this.getGoodsData('new')
     this.getGoodsData('sell')
   },
+  computed:{
+    showGoods(){
+      return this.goods[this.currentType].list
+    }
+  },
   methods:{
+    tabClick(index){
+      switch(index){
+        case 0:
+          this.currentType = 'pop';
+          break
+        case 1:
+          this.currentType = 'new';
+          break
+        case 2:
+          this.currentType = 'sell';
+          break
+      }
+    },
     getHomeMultiData(){
       getHomeMultiData().then(res=>{
       this.banners = res.data.banner.list
@@ -108,7 +99,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #home-nav{
   background-color: var(--color-tint);
   color: #fff;
@@ -120,12 +111,27 @@ export default {
 }
 #home {
   padding-top: 44px;
+  height: 100vh;
+  position: relative;
 }
 .tab-control {
   position: sticky;
   top: 44px;
   background-color: #fff;
   z-index: 9;
+}
+/* .content{
+  height:calc(100% - 93px);
+  overflow: hidden;
+  margin-top: 44px;
+} */
+.content{
+  overflow: hidden;
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
 }
 
 </style>
