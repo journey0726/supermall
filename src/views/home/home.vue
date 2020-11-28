@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <NavBar id="home-nav"> <div slot="center">购物街</div></NavBar>
-    <scroll class="content" ref="scroll">
+    <scroll class="content" ref="scroll" :probe-type='3' @scroll = 'contentScroll' :pull-up-load='true' @pullingUp='loadMore'>
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-view></feature-view>
@@ -12,7 +12,7 @@
       ></tab-control>
       <goods-list :goods="goods[currentType].list"></goods-list>
     </scroll>
-    <back-top @click.native="backTop"></back-top>
+    <back-top @click.native="backTop" v-show="isShow"></back-top>
   </div>
 </template>
 
@@ -52,6 +52,7 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: "pop",
+      isShow:false
     };
   },
   created() {
@@ -59,6 +60,9 @@ export default {
     this.getGoodsData("pop");
     this.getGoodsData("new");
     this.getGoodsData("sell");
+    this.$bus.$on('itemImageLoad',()=>{
+      this.$refs.scroll.refresh()
+    })
   },
   computed: {
     showGoods() {
@@ -79,6 +83,14 @@ export default {
           break;
       }
     },
+    contentScroll(position){
+      this.isShow = (-position.y)>1000
+      
+    },
+    loadMore(){
+      this.getGoodsData(this.currentType)
+      
+    },
     backTop(){
       this.$refs.scroll.scrollTo(0,0)
     },
@@ -93,6 +105,7 @@ export default {
       getGoodsData(type, page).then((res) => {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
+        this.$refs.scroll.finishPulling()
       });
     },
   },
