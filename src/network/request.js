@@ -16,7 +16,7 @@ export function request(config) {
 
   })
 
-  // 相应拦截器
+  // 响应拦截器
   instance.interceptors.response.use(res => {
     // 拦截后需要将拦截下来处理成的结果返回
     return res.data

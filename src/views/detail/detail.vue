@@ -1,14 +1,16 @@
 <template>
   <div id = 'detail'>
-    <detail-nav-bar class="detail-nav"></detail-nav-bar>
-    <scroll class="content" :pullUpLoad='true' ref="scroll">
+    <detail-nav-bar class="detail-nav" @titleClick='titleClick'></detail-nav-bar>
+    <scroll class="content" :pullUpLoad='true' ref="scroll" @scroll = 'contentScroll'>
         <detail-swiper :topImage='topImage'></detail-swiper>
         <detail-base-info :goods='goods'></detail-base-info>
         <detail-shop-info :shop='shop'></detail-shop-info>
         <detail-goods-info :detailInfo='dataInfo' @loadImgEvent='loadImgEvent'></detail-goods-info>
-        <detail-params :paramInfo='paramInfo'></detail-params>
-        <detail-comment :comment="comment"></detail-comment>
+        <detail-params :paramInfo='paramInfo' ref="params"></detail-params>
+        <detail-comment :comment="comment" ref="comment"></detail-comment>
+        <good-list :goods='recommend' ref="goodlist"></good-list>
     </scroll>
+        <back-top  @click.native="backTop" v-show="isShow"></back-top>
    
   </div>
 </template>
@@ -21,14 +23,12 @@ import DetailShopInfo from './childComps/DetailShopInfo'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailParams from './childComps/DetailParams'
 import DetailComment from './childComps/DetailComment'
+import GoodList from '@/components/content/goods/goodsList.vue'
+import BackTop from '@/components/content/backTop/backTop.vue'
 
 import Scroll from '@/components/commom/scroll/Scroll.vue'
-
-import {getDetail,Goods,Shop,GoodsParam} from '@/network/detail.js'
-
-
-
-
+import {debounce} from '@/common/utils.js'
+import {getDetail,Goods,Shop,GoodsParam,getRecommend} from '@/network/detail.js'
 
 
 
@@ -39,10 +39,13 @@ export default {
         DetailSwiper,
         DetailBaseInfo ,
         DetailShopInfo ,
-        Scroll,
         DetailGoodsInfo,
         DetailParams,
-        DetailComment
+        DetailComment,
+        GoodList,
+        Scroll,
+        BackTop
+        
         
         
        
@@ -56,13 +59,17 @@ export default {
             shop:{},
             dataInfo:{},
             paramInfo:{},
-            comment:{}
+            comment:{},
+            recommend:[],
+            themeTopYs:[],
+            getTopYs:null,
+            isShow:false,
         }
     },
     created(){
         this.iid = this.$route.params.iid,
         getDetail(this.iid).then(res=>{
-            console.log(res);
+            
             this.topImage = res.result.itemInfo.topImages
             const data = res.result
             this.goods = new Goods(data.itemInfo,data.columns,data.shopInfo.services)
@@ -70,12 +77,50 @@ export default {
             this.dataInfo = data.detailInfo
             this.paramInfo = new GoodsParam(data.itemParams.info,data.itemParams.rule)
             this.comment = data.rate.list[0]
+            this.getTopYs = debounce(()=>{
+                this.themeTopYs=[]
+                this.themeTopYs.push(0)
+                this.themeTopYs.push(this.$refs.params.$el.offsetTop-44)
+                this.themeTopYs.push(this.$refs.comment.$el.offsetTop-44)
+                this.themeTopYs.push(this.$refs.goodlist.$el.offsetTop-44)
+                console.log(this.themeTopYs);
+            },300)
+            // this.$nextTick(()=>{
+            //     this.themeTopYs=[],
+            //     this.themeTopYs.push(0)
+            //     this.themeTopYs.push(this.$refs.params.$el.offsetTop)
+            //     this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
+            //     this.themeTopYs.push(this.$refs.goodlist.$el.offsetTop)
+            //     console.log(this.themeTopYs);
+            // })
+        }),
+        getRecommend().then(res=>{
+           
+           this.recommend = res.data.list
         })
+    },
+    mounted(){
+        const refresh = debounce(this.$refs.scroll.refresh,50)
+        this.$bus.$on('itemImageLoad',()=>{
+        refresh()
+    })
+    
     },
     methods:{
         loadImgEvent(){
             this.$refs.scroll.refresh()
-        }
+               this.getTopYs()
+        },
+         backTop(){
+      this.$refs.scroll.scrollTo(0,0)
+    },
+    contentScroll(position){
+      this.isShow = (-position.y)>1000     
+    },
+    titleClick(index){
+       
+        this.$refs.scroll.scrollTo(0,-this.themeTopYs[index],500)
+    }
     }
 }
 </script>
