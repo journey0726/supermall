@@ -56,7 +56,7 @@ export default {
 }
 .bottom_left .icon {
   display: block;
-  background: url("~assets/img/detail/detail_bottom.png") 0 0/100%;
+  background: url("~@/assets/img/detail/detail_bottom.png") 0 0/100%;
   width: 1rem;
   height: 1rem;
   margin: 0.12rem auto;
