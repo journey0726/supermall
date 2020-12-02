@@ -5,6 +5,7 @@
       @titleClick="titleClick"
       ref="nav"
     ></detail-nav-bar>
+
     <scroll
       class="content"
       :pullUpLoad="true"
@@ -20,10 +21,14 @@
       ></detail-goods-info>
       <detail-params :paramInfo="paramInfo" ref="params"></detail-params>
       <detail-comment :comment="comment" ref="comment"></detail-comment>
-      <good-list :goods="recommend" ref="goodlist" class="recommend"></good-list>
+      <good-list
+        :goods="recommend"
+        ref="goodlist"
+        class="recommend"
+      ></good-list>
     </scroll>
     <back-top @click.native="backTop" v-show="isShow"></back-top>
-    <detail-bottom-bar></detail-bottom-bar>
+    <detail-bottom-bar @addEvent="addToCart"></detail-bottom-bar>
   </div>
 </template>
 
@@ -49,7 +54,6 @@ import {
   getRecommend,
 } from "@/network/detail.js";
 
-
 export default {
   name: "Detail",
   components: {
@@ -63,8 +67,7 @@ export default {
     GoodList,
     Scroll,
     BackTop,
-    DetailBottomBar
-    
+    DetailBottomBar,
   },
   data() {
     return {
@@ -78,7 +81,7 @@ export default {
       recommend: [],
       themeTopYs: [],
       getTopYs: null,
-      currentIndex:0,
+      currentIndex: 0,
       isShow: false,
     };
   },
@@ -105,7 +108,6 @@ export default {
           this.themeTopYs.push(this.$refs.params.$el.offsetTop - 44);
           this.themeTopYs.push(this.$refs.comment.$el.offsetTop - 44);
           this.themeTopYs.push(this.$refs.goodlist.$el.offsetTop - 44);
-         
         }, 300);
         // this.$nextTick(()=>{
         //     this.themeTopYs=[],
@@ -134,27 +136,37 @@ export default {
     backTop() {
       this.$refs.scroll.scrollTo(0, 0);
     },
-  contentScroll(position) {
+    contentScroll(position) {
       this.isShow = -position.y > 1000;
       //console.log(position);
-      const positionY = -position.y
+      const positionY = -position.y;
       //console.log(positionY);
-      let length = this.themeTopYs.length
-      for(let i = 0;i<length;i++){
-        if(this.currentIndex!==i && 
-        ((i<length-1&&positionY>=this.themeTopYs[i]&&positionY<this.themeTopYs[i+1])
-        ||(i===length-1&&positionY>=this.themeTopYs[i]))){
+      let length = this.themeTopYs.length;
+      for (let i = 0; i < length; i++) {
+        if (
+          this.currentIndex !== i &&
+          ((i < length - 1 &&
+            positionY >= this.themeTopYs[i] &&
+            positionY < this.themeTopYs[i + 1]) ||
+            (i === length - 1 && positionY >= this.themeTopYs[i]))
+        ) {
           this.currentIndex = i;
-          this.$refs.nav.currentIndex = this.currentIndex
+          this.$refs.nav.currentIndex = this.currentIndex;
         }
       }
-      
-      
-        
-
     },
     titleClick(index) {
       this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 500);
+    },
+    addToCart() {
+      const product = {};
+      product.image = this.topImage[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+      // this.$store.commit('addCart',product)
+      this.$store.dispatch("addCart", product);
     },
   },
 };
@@ -175,7 +187,7 @@ export default {
 .content {
   height: calc(100% - 44px);
 }
-.recommend{
+.recommend {
   padding-bottom: 30px;
 }
 </style>
