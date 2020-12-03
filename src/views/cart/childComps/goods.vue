@@ -1,14 +1,14 @@
 <template>
    <div>
         <scroll class="content" :pullUpLoad="true">
-           <goods-item v-for="(item, index) in cartList" :product = "item"></goods-item>
+           <goods-item v-for="(item, index) in cartList" :product = "item" :key="index"></goods-item>
         </scroll>
     </div> 
     
 </template>
 
 <script>
-import goodsItem from './goodsItem'
+import goodsItem from './goodsItem.vue'
 import { mapGetters } from 'vuex'
 import Scroll from '@/components/commom/scroll/Scroll.vue'
 
@@ -20,12 +20,7 @@ export default {
      
 
     },
-    data(){
-         return {
-          
-          
-         }
-    },
+
     computed:{
         ...mapGetters(['cartList'])
     }
