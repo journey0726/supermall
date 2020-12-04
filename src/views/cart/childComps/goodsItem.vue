@@ -1,7 +1,7 @@
 <template>
   <div class="goods">
     <div class = 'check'>
-      <input type="checkbox">
+      <input type="checkbox" :checked="product.checked" @click="isClick">
     </div>
     
       <img :src="product.image" alt="" class="img">
@@ -31,6 +31,11 @@ export default {
             }
         }
     },
+    methods:{
+      isClick(){
+        this.product.checked = !this.product.checked 
+      }
+    }
    
 }
 </script>
@@ -61,6 +66,7 @@ export default {
   top: 13px;
 }
 .check{
+  margin-left:5px ;
   position: absolute;
   top:40px;
 }
