@@ -1,7 +1,7 @@
 <template>
 <div class="total">
-    <label for="all" class="all">
-    <input type="checkbox" id = 'all'> 全选
+    <label for="all" class="all"  >
+    <input type="checkbox" id = 'all' :checked ='isAllSelect' @click="isClick"> 全选
     </label>
     <div class="totalPrice"> 
     <p>合计:￥{{totalPrice}}</p>
@@ -16,7 +16,6 @@
 <script>
 export default {
     name:'total',
-  
     computed:{
         totalPrice(){
             return this.$store.state.cartList.filter(item => item.checked)
@@ -29,6 +28,29 @@ export default {
             .reduce((preValue,item) => {
                 return preValue + item.count
             },0)
+        },
+        isAllSelect(){
+            if(this.$store.state.cartList.filter(item => item.checked).length === this.$store.state.cartList.length){
+                if(this.$store.state.cartList.length ===0) return false;
+                return true;
+            }
+            
+        }
+    },
+    methods:{
+        isClick(){
+            if(this.$store.state.cartList.filter(item => item.checked).length === this.$store.state.cartList.length){
+                // for(items in this.$store.state.cartList){
+                //     items.checked = !items.checked
+                // }
+                this.$store.state.cartList.forEach(item => item.checked = false)
+            }
+            else {
+                //  for(items of this.$store.state.cartList){
+                //     items.checked = true;
+                // }
+                  this.$store.state.cartList.forEach(item => item.checked = true)
+            }
         }
     }
 }

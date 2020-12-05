@@ -166,7 +166,10 @@ export default {
       product.price = this.goods.realPrice;
       product.iid = this.iid;
       // this.$store.commit('addCart',product)
-      this.$store.dispatch("addCart", product);
+      this.$store.dispatch("addCart", product).then(res=>{
+        this.$toast.show(res)
+        console.log(this.$toast);
+      });
     },
   },
 };
