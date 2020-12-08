@@ -168,7 +168,7 @@ export default {
       // this.$store.commit('addCart',product)
       this.$store.dispatch("addCart", product).then(res=>{
         this.$toast.show(res)
-        console.log(this.$toast);
+      
       });
     },
   },
