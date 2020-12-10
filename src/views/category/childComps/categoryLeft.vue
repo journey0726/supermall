@@ -28,10 +28,12 @@ export default {
     },
     methods:{
         itemClick(index){
-            this.currentIndex = index
-          
-        }
+            this.currentIndex = index;
+            this.$emit("categoryClick",this.currentIndex)  
+        },
+
     },
+
 }
 </script>
 
