@@ -3,7 +3,7 @@
     <NavBar id="navBar">
       <div slot="center">分类</div>
     </NavBar>
-    <category-left :title='categoryList'></category-left @categoryClick='changeList'>
+    <category-left :title='categoryList'></category-left>
   <Scroll class="content" :pullUpLoad="true" :probe-type='3'>
     <categoryRight></categoryRight>
   </Scroll>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {getCategory,getCategoryInfo} from '@/network/category.js'
+import {getCategory} from '@/network/category.js'
 import NavBar from '@/components/commom/navbar/NavBar.vue'
 import categoryLeft from './childComps/categoryLeft.vue'
 import categoryRight from './childComps/categoryRight.vue'
@@ -31,16 +31,13 @@ export default {
   data(){
     return {
       categoryList:[],
-      goodsList:[],
-      number:Number
+     
     }
   },
   created(){
     this.getCategory()
   },
-  mounted(){
-    this.getCategoryInfo(3627)
-  },
+ 
   methods:{
     getCategory(){
       getCategory().then(res =>{
@@ -48,17 +45,8 @@ export default {
         console.log(res);
       })
     },
-    getCategoryInfo(maitKey){
-        
-        getCategoryInfo(maitKey).then(res=>{
-          this.goodsList = res;
-          console.log(res);
-        })
-    },
-    changeList(index){
-      this.number = index;
-      console.log(this.number);
-    }
+  
+   
   }
 
 }
