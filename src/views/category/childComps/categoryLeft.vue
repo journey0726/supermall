@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { getCategoryInfo } from "@/network/category.js";
+
 export default {
   name: "categoryLeft",
   props: {
@@ -26,23 +26,25 @@ export default {
   data() {
     return {
       currentIndex: 0,
-      goodsList: [],
+      currentMaitKey:3627
     };
   },
   // mounted(){
-  //     this.getCategoryInfo(3627)
+  //   this.itemClick(0)
   // },
+
   methods: {
-    itemClick(index, item) {
+    itemClick(index) {
       this.currentIndex = index;
-      this.$options.methods.getCategoryInfo(item.maitKey);
+      // console.log(this.title);
+      if(this.title){
+        this.currentMaitKey = this.title[index].maitKey
+        this.$emit('changeIndex')
+        console.log(this.currentMaitKey);
+      }
+     
     },
-    getCategoryInfo(maitKey) {
-      getCategoryInfo(maitKey).then((res) => {
-        this.goodsList = res;
-        console.log(res);
-      });   
-    },
+ 
   },
 };
 </script>
