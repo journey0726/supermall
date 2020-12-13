@@ -41,7 +41,7 @@ export default {
         })
     },
     methods:{
-        scrollTo(x,y,time=500){
+        scrollTo(x,y,time=1000){
              this.scroll&&this.scroll.scrollTo(x,y,time)
         },
         finishPulling(){

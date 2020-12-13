@@ -40,7 +40,7 @@ export default {
       if(this.title){
         this.currentMaitKey = this.title[index].maitKey
         this.$emit('changeIndex')
-        console.log(this.currentMaitKey);
+        // console.log(this.currentMaitKey);
       }
      
     },

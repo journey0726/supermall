@@ -48,13 +48,13 @@ export default {
         //   this.$refs.left.itemClick(0)
         // }
         
-        console.log(res);
+        // console.log(res);
       })
     },
      async getCategoryInfo(maitKey) {
       getCategoryInfo(maitKey).then((res) => {
         this.goodsList = res.data.list;
-        console.log(this.goodsList);
+        // console.log(this.goodsList);
         // this.$bus.$emit('changList',this.goodsList)
       });  
        
