@@ -1,82 +1,78 @@
 <template>
   <div class="profile">
-    <h2 class="title">用户登录</h2>
-    
+    <h3 class="title">用户登录</h3>
+
     <div class="input">
-        <input type="text" placeholder="用户名" class="user">
-        <input type="password" placeholder="密码" class="password">
+      <label >用户名</label>
+      <input type="text" placeholder="请输入用户名" class="user" />
+      <label >密码</label>
+      <input type="password" placeholder="请输入密码" class="password" />
     </div>
-  
-    <input type="submit" value="登录" class="submit">
-  <div>
-    <a href="#" class="forget">忘记密码</a>
-    <a href="#" class="register">账号注册</a>
-  </div>
- 
+
+    <input class="login" type="submit" value="登录" />
+    <div class="go">
+      <a href="#" class="forget">忘记密码</a>
+      <a href="#" class="register">账号注册</a>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name:'profile'
-}
+  name: "profile",
+};
 </script>
 
-<style scoped>
-.profile{
-  height: 100vh;
-  background-color: #eee;
-  overflow: hidden;
-  padding-top: 20px;
-}
-  .title{
-    margin-bottom: 20px;
-    color:rgb(9, 120, 172);
-    position:relative;
-    left: calc(50vw - 50px);
-    padding-top: 20px; 
-  }
-  .user,.password{
-    outline: rgb(9, 120, 172);
-    border: none;
-    border-bottom: solid rgb(8, 196, 230) 1px;
-    padding: 5px;
-    margin-left: 50px;
-    background-color: #eee;
-  }
-  input::-webkit-input-placeholder{
-    color: rgb(168, 49, 45);
-  }
-  .user {
-    margin-bottom: 20px;
-  }
-  .submit{
-    position: relative;
-    width: 200px;
-    height: 30px;
-    margin-top: 20px;
-    margin-left: 53px;
-    background-color: rgb(9, 120, 172);
-    display:block;
-    color: #fff;
-    outline: none;
-    border-radius: 5px;
-  }
-  .submit:hover{
-    background-color: rgb(7, 88, 126);
-  }
-  .forget{
-    float: left;
-    font-size: 10px;
-    margin-left: 50px;
-    margin-top: 10px;
-    color: rgb(9, 120, 172);
-  }
-  .register{
-    float: right;
-    font-size: 10px;
-    margin-right: 60px;
-    margin-top: 10px;
-    color: rgb(9, 120, 172);
+<style lang='scss' scoped>
+input::-webkit-input-placeholder{
+  color:#ddd
+}  
+  .profile{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .title{
+      font-size: 25px;
+      margin-top: 45px;
+    }
+    .input{
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 25px;
+      label{
+        position: relative;
+        right: 40%;
+      }
+      input{
+        width: 90%;
+        font-size: 15px;
+        outline-style: none;
+        border:0px;
+        border-bottom:1px solid #ccc;
+        padding:15px;
+        margin-bottom: 25px;
+      }
+    }
+    .login{
+      outline-style: none;
+      width: 80%;
+      height: 40px;
+      border-radius: 25px;
+      background-color: rgb(79, 153, 250);
+      color: #fff;
+      letter-spacing :10px
+    }
+    .go{
+      display: flex;
+      width: 90%;
+      justify-content: space-around;
+      margin-top: 35px;
+      .forget{
+        font-size: 15px;
+      }
+    }
   }
 </style>
