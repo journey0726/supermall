@@ -12,6 +12,7 @@ export function debounce(func, delay=300) {
  * 格式化函数 ， 给日期格式化
  * date为 new Date()对象， fmt为 'yyyy-MM-dd'的格式
  */
+
 export function formatDate(date, fmt) {
     //获取年份
     if (/(y+)/.test(fmt)) {
