@@ -10,7 +10,17 @@ module.exports = {
             }
         },
 
-},devServer:{
-    host:'0.0.0.0'
-}
+    }, devServer: {
+        host: '0.0.0.0',
+        proxy: {
+            '/api': {
+                target: '<url>',
+                ws: true,
+                changeOrigin: true
+            },
+            '/foo': {
+                target: '<other_url>'
+            }
+        }
+    }
 }
